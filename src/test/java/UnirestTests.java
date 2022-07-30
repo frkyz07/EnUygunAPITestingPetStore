@@ -1,12 +1,11 @@
 import com.github.javafaker.Faker;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Field;
 
 
 public class UnirestTests {
@@ -36,18 +35,21 @@ public class UnirestTests {
     @Test(priority = 2)
     public void invalid_post_request() throws UnirestException, NoSuchFieldException, IllegalAccessException {
 
-        String body = "{\n  \"id\":" + "-" + id + ",\n  \"petId\": " + petId + ",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
+        String body = "{\n  \"id\":" +invalidId + ",\n  \"petId\": " + petId + ",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
 
         Unirest.setTimeouts(0, 0);
-        HttpResponse<String> response = Unirest.post("https://petstore.swagger.io/v2/store/order/")
+        HttpResponse<JsonNode> response = Unirest.post("https://petstore.swagger.io/v2/store/order/")
                 .header("Content-Type", "application/json")
                 .body(body)
-                .asString();
+                .asJson();
 
-
+        int reponse_id = (int) response.getBody().getObject().get("id");
         System.out.println(body);
         System.out.println(response.getBody());
         Assert.assertEquals(response.getStatus(), 400);
+        Assert.assertEquals(reponse_id, invalidId);
+
+
 
 
     }
