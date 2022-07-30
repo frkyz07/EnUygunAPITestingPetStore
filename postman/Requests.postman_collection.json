@@ -1,0 +1,502 @@
+{
+	"info": {
+		"_postman_id": "24136e3a-a663-4b78-883b-23708ecedd7f",
+		"name": "Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20000133"
+	},
+	"item": [
+		{
+			"name": "Valid_post_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).to.be.a(\"number\");",
+							"  pm.expect(jsonData.petId).to.be.a(\"number\");",
+							"  pm.expect(jsonData.shipDate).to.be.an(\"string\");",
+							"  pm.expect(jsonData.status).to.be.an(\"string\");",
+							"  pm.expect(jsonData.complete).to.be.true;",
+							"});",
+							"pm.test(\"Id should be correct\", function () {",
+							"    pm.expect(jsonData.id).to.eql(1313);",
+							"});",
+							"pm.test(\"petId should be correct\", function () {",
+							"    pm.expect(jsonData.petId).to.eql(1313);",
+							"});",
+							"pm.test(\"quantity should be correct\", function () {",
+							"    pm.expect(jsonData.quantity).to.eql(1);",
+							"});",
+							"pm.test(\"shipDate should be correct\", function () {",
+							"    pm.expect(jsonData.shipDate).to.eql(\"2022-07-29T15:15:50.460+0000\");",
+							"});",
+							"pm.test(\"status should be correct\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"placed\");",
+							"});",
+							"pm.test(\"complete should be correct\", function () {",
+							"    pm.expect(jsonData.complete).to.true;",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "petId",
+						"value": "1313",
+						"type": "text"
+					},
+					{
+						"key": "quantity",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "shipDate",
+						"value": "\"2022-07-29T15:15:50.460Z\"",
+						"type": "text"
+					},
+					{
+						"key": "status",
+						"value": "placed",
+						"type": "text"
+					},
+					{
+						"key": "complete",
+						"value": "true",
+						"type": "text"
+					},
+					{
+						"key": "id",
+						"value": "1313",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1313,\n  \"petId\": 1313,\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460Z\",\n  \"status\": \"placed\",\n  \"complete\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}{{store_post}}",
+					"host": [
+						"{{base_url}}{{store_post}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid_post_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).to.be.a(\"number\");",
+							"  pm.expect(jsonData.petId).to.be.a(\"number\");",
+							"  pm.expect(jsonData.shipDate).to.be.an(\"string\");",
+							"  pm.expect(jsonData.status).to.be.an(\"string\");",
+							"  pm.expect(jsonData.complete).to.be.true;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id should be correct\", function () {",
+							"    pm.expect(jsonData.id).to.eql(-1313);",
+							"});",
+							"pm.test(\"petId should be correct\", function () {",
+							"    pm.expect(jsonData.petId).to.eql(-1313);",
+							"});",
+							"pm.test(\"quantity should be correct\", function () {",
+							"    pm.expect(jsonData.quantity).to.eql(1);",
+							"});",
+							"pm.test(\"shipDate should be correct\", function () {",
+							"    pm.expect(jsonData.shipDate).to.eql(\"2022-07-29T15:15:50.460+0000\");",
+							"});",
+							"pm.test(\"status should be correct\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"placed\");",
+							"});",
+							"pm.test(\"complete should be correct\", function () {",
+							"    pm.expect(jsonData.complete).to.true;",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": -1313,\n  \"petId\": -1313,\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460Z\",\n  \"status\": \"placed\",\n  \"complete\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}{{store_post}}",
+					"host": [
+						"{{base_url}}{{store_post}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid_get_order_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).to.be.a(\"number\");",
+							"  pm.expect(jsonData.petId).to.be.a(\"number\");",
+							"  pm.expect(jsonData.shipDate).to.be.an(\"string\");",
+							"  pm.expect(jsonData.status).to.be.an(\"string\");",
+							"  pm.expect(jsonData.complete).to.be.true;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id should be correct\", function () {",
+							"    pm.expect(jsonData.id).to.eql(1313);",
+							"});",
+							"pm.test(\"petId should be correct\", function () {",
+							"    pm.expect(jsonData.petId).to.eql(1313);",
+							"});",
+							"pm.test(\"quantity should be correct\", function () {",
+							"    pm.expect(jsonData.quantity).to.eql(1);",
+							"});",
+							"pm.test(\"shipDate should be correct\", function () {",
+							"    pm.expect(jsonData.shipDate).to.eql(\"2022-07-29T15:15:50.460+0000\");",
+							"});",
+							"pm.test(\"status should be correct\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"placed\");",
+							"});",
+							"pm.test(\"complete should be correct\", function () {",
+							"    pm.expect(jsonData.complete).to.true;",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "{{id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}{{store_get}}{{id}}",
+					"host": [
+						"{{base_url}}{{store_get}}{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid_get_order_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test data type of the response\", () => {",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.id).to.be.a(\"number\");",
+							"  pm.expect(jsonData.petId).to.be.a(\"number\");",
+							"  pm.expect(jsonData.shipDate).to.be.an(\"string\");",
+							"  pm.expect(jsonData.status).to.be.an(\"string\");",
+							"  pm.expect(jsonData.complete).to.be.true;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id should be correct\", function () {",
+							"    pm.expect(jsonData.id).to.eql(1313);",
+							"});",
+							"pm.test(\"petId should be correct\", function () {",
+							"    pm.expect(jsonData.petId).to.eql(1313);",
+							"});",
+							"pm.test(\"quantity should be correct\", function () {",
+							"    pm.expect(jsonData.quantity).to.eql(1);",
+							"});",
+							"pm.test(\"shipDate should be correct\", function () {",
+							"    pm.expect(jsonData.shipDate).to.eql(\"2022-07-29T15:15:50.460+0000\");",
+							"});",
+							"pm.test(\"status should be correct\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"placed\");",
+							"});",
+							"pm.test(\"complete should be correct\", function () {",
+							"    pm.expect(jsonData.complete).to.true;",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}{{store_get}}{{invalid_id}}",
+					"host": [
+						"{{base_url}}{{store_get}}{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid_get_inventory_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test data type of the response\", () => {",
+							"",
+							"  pm.expect(jsonData).to.be.an(\"object\");",
+							"  pm.expect(jsonData.sold).to.be.a(\"number\");",
+							"  pm.expect(jsonData.string).to.be.a(\"number\");",
+							"  pm.expect(jsonData.unavailable).to.be.a(\"number\");",
+							"  pm.expect(jsonData.pending).to.be.a(\"number\");",
+							"  pm.expect(jsonData.available).to.be.a(\"number\");",
+							"  pm.expect(jsonData.Metallurgist).to.be.a(\"number\");",
+							"  pm.expect(jsonData.status).to.be.a(\"number\");",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"  ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}{{store_get_inventory}}",
+					"host": [
+						"{{base_url}}{{store_get_inventory}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Valid_Delete_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Delete message should be correct\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.message).to.eql(\"1313\");",
+							"});",
+							"pm.test(\"Delete message should be correct\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.type).to.eql(\"unknown\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}{{store_post}}{{id}}",
+					"host": [
+						"{{base_url}}{{store_post}}{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid_Delete_request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"pm.test(\"Delete message should be correct\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.message).to.eql(\"Order Not Found\");",
+							"});",
+							"pm.test(\"Delete message should be correct\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.type).to.eql(\"unknown\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}{{store_post}}{{invalid_id}}",
+					"host": [
+						"{{base_url}}{{store_post}}{{invalid_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
