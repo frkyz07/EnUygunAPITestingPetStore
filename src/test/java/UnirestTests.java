@@ -19,12 +19,14 @@ public class UnirestTests {
     String post_endpoint = "/store/order/";
     String inventory_endpoint = "/store/inventory";
     String url = "https://petstore.swagger.io/v2";
+    String body = "{\n  \"id\":"+id+",\n  \"petId\": "+petId+",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
+    String invalidbody = "{\n  \"id\":" +invalidId + ",\n  \"petId\": " + petId + ",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
+
     @Test(priority = 1)
     public void valid_post_request() throws UnirestException {
 
         // this is our valid post scenario
         // we are getting the body from postman
-        String body = "{\n  \"id\":"+id+",\n  \"petId\": "+petId+",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
 
         Unirest.setTimeouts(0, 0);
         HttpResponse<String> response = Unirest.post(url+post_endpoint)
@@ -44,16 +46,15 @@ public class UnirestTests {
         // this is our invalid post request
         // i did this test for checking invalid scenario
         // instead of giving a normal id number i am giving a number below than zero
-        String body = "{\n  \"id\":" +invalidId + ",\n  \"petId\": " + petId + ",\n  \"quantity\": 1,\n  \"shipDate\": \"2022-07-29T15:15:50.460+0000\",\n  \"status\": \"placed\",\n  \"complete\": true\n}";
 
         Unirest.setTimeouts(0, 0);
         HttpResponse<JsonNode> response = Unirest.post("https://petstore.swagger.io/v2/store/order/")
                 .header("Content-Type", "application/json")
-                .body(body)
+                .body(invalidbody)
                 .asJson();
 
         int reponse_id = (int) response.getBody().getObject().get("id");
-        System.out.println(body);
+        System.out.println(invalidbody);
         System.out.println(response.getBody());
         // the test should fail but it dont fail
         Assert.assertEquals(response.getStatus(), 400);
