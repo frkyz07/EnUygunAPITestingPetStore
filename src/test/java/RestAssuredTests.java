@@ -1,7 +1,7 @@
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import models.RequestBody;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -18,17 +18,8 @@ public class RestAssuredTests {
     Response response;
 
     public void base_url() {
-        baseURI = "manav";
+        baseURI = "https://petstore.swagger.io/v2/pet";
     }
-
-    public RequestBody.request createRequest() {
-        int id = 3;
-        String name = "banana";
-        Double price = 3.5;
-        int stock = 250;
-        return new RequestBody.request(id, name, price, stock);
-    }
-
 
     @Test(priority = 1)
     public void validGetRequest() {
@@ -37,18 +28,18 @@ public class RestAssuredTests {
                 given()
                         .accept(ContentType.JSON)
                         .header("Contect-Type", "application/json")
+                        .param("status","pending")
                         .when()
-                        .get("/allGrocery")
+                        .get("/findByStatus")
                         .then()
                         .statusCode(200)
                         .time(lessThan(500L))
                         .extract().response();
 
         JsonPath jsonPathEvaluator = response.jsonPath();
-        List<RequestBody.request> allResponds = jsonPathEvaluator.getList("data", RequestBody.request.class);
 
         // Asserting for the first response
-        Assert.assertNotNull(response.getBody());
+        /*Assert.assertNotNull(response.getBody());
         Assert.assertEquals(1, allResponds.get(0).getId());
         Assert.assertEquals("apple", allResponds.get(0).getName());
         Assert.assertEquals(3, allResponds.get(0).getPrice());
@@ -58,9 +49,10 @@ public class RestAssuredTests {
         Assert.assertEquals(2, allResponds.get(1).getId());
         Assert.assertEquals("grapes", allResponds.get(1).getName());
         Assert.assertEquals(5, allResponds.get(1).getPrice());
-        Assert.assertEquals(50, allResponds.get(1).getStock());
+        Assert.assertEquals(50, allResponds.get(1).getStock());*/
     }
-    @Test(priority = 2)
+    /*
+    @Test(priority = 2, enabled = false)
     public void validPostRequest() {
 
         Map<String, Object> requestData = new HashMap<>();
@@ -86,7 +78,7 @@ public class RestAssuredTests {
         Assert.assertEquals(250, (Integer) bodyJson.get("stock"));
 
     }
-    @Test(priority = 3)
+    @Test(priority = 3, enabled = false)
     public void validGetNameRequest() {
 
         this.response =
@@ -109,7 +101,7 @@ public class RestAssuredTests {
         Assert.assertEquals(250, (Integer) bodyJson.get("stock"));
     }
 
-    @Test(priority = 4)
+    @Test(priority = 4, enabled = false)
     public void invalidPostRequestFourHundred() {
 
         Map<String, Object> requestData = new HashMap<>();
@@ -134,7 +126,7 @@ public class RestAssuredTests {
         // Asserting for the first response
         Assert.assertNull(bodyJson);
     }
-    @Test(priority = 5)
+    @Test(priority = 5, enabled = false)
     public void invalidPostRequestFourHundredFour() {
 
         Map<String, Object> requestData = new HashMap<>();
@@ -157,6 +149,6 @@ public class RestAssuredTests {
         JsonPath bodyJson = response.jsonPath();
         // Asserting for the first response
         Assert.assertNull(bodyJson);
-    }
+    }*/
 
 }
