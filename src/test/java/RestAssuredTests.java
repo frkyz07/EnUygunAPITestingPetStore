@@ -2,45 +2,83 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.lessThan;
 
 
 public class RestAssuredTests {
 
     Response response;
 
-    public void base_url() {
+    public RestAssuredTests() {
         baseURI = "https://petstore.swagger.io/v2/pet";
     }
+    @Test(priority = 1)
+    public void validGetRequestWithAvailable() {
 
+        response =
+                given()
+                        .log().all()
+                        .accept(ContentType.JSON)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .param("status","available")
+                        .get("/findByStatus")
+                        .then()
+                        .statusCode(200)
+                        .extract().response();
+
+
+
+        Assert.assertNotNull(response.getBody());
+        System.out.println(response.getBody());
+    }
+    @Test(priority = 1)
+    public void validGetRequestWithPending() {
+
+        response =
+                given()
+                        .log().all()
+                        .accept(ContentType.JSON)
+                        .header("Content-Type", "application/json")
+                        .when()
+                        .param("status","pending")
+                        .get("/findByStatus")
+                        .then()
+                        .statusCode(200)
+                        .extract().response();
+
+
+
+        Assert.assertNotNull(response.getBody());
+        System.out.println(response.getBody());
+    }
     @Test(priority = 1)
     public void validGetRequest() {
 
         response =
                 given()
+                        .log().all()
                         .accept(ContentType.JSON)
-                        .header("Contect-Type", "application/json")
-                        .param("status","pending")
+                        .header("Content-Type", "application/json")
                         .when()
+                        .param("status","sold")
                         .get("/findByStatus")
                         .then()
                         .statusCode(200)
-                        .time(lessThan(500L))
                         .extract().response();
 
-        JsonPath jsonPathEvaluator = response.jsonPath();
 
+
+        Assert.assertNotNull(response.getBody());
+        System.out.println(response.getBody());
+    }
         // Asserting for the first response
-        /*Assert.assertNotNull(response.getBody());
-        Assert.assertEquals(1, allResponds.get(0).getId());
+
+       /* Assert.assertEquals(1, allResponds.get(0).getId());
         Assert.assertEquals("apple", allResponds.get(0).getName());
         Assert.assertEquals(3, allResponds.get(0).getPrice());
         Assert.assertEquals(100, allResponds.get(0).getStock());
@@ -50,7 +88,7 @@ public class RestAssuredTests {
         Assert.assertEquals("grapes", allResponds.get(1).getName());
         Assert.assertEquals(5, allResponds.get(1).getPrice());
         Assert.assertEquals(50, allResponds.get(1).getStock());*/
-    }
+
     /*
     @Test(priority = 2, enabled = false)
     public void validPostRequest() {
