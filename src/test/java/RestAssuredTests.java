@@ -36,90 +36,127 @@ public class RestAssuredTests {
     @Test(priority = 1)
     public void validGetRequestWithAvailable() {
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .params("status", "available")
-                        .get("/pet/findByStatus")
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .params("status", "available")
+                            .get("/pet/findByStatus")
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request cannot sended"+e);
+        }
+
 
 
         response.getHeader("param");
         ArrayList status = response.path("status");
 
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals(status.get(0),"available");
-        Assert.assertEquals(response.getStatusCode(),200 );
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals(status.get(0),"available");
+            Assert.assertEquals(response.getStatusCode(),200 );
+        }catch (AssertionError e){
+            System.out.println("Assertion Error"+e);
+        }
+
 
     }
     @Test(priority = 2)
     public void validGetRequestWithPending() {
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .params("status","pending")
-                        .get("/pet/findByStatus")
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .params("status","pending")
+                            .get("/pet/findByStatus")
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request cannot be send"+e);
+        }
+
 
         response.getHeader("param");
         ArrayList status = response.path("status");
 
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals(status.get(0),"pending");
-        Assert.assertEquals(response.getStatusCode(),200 );
-
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals(status.get(0),"pending");
+            Assert.assertEquals(response.getStatusCode(),200 );
+        }catch (AssertionError e){
+            System.out.println("Assertion Error"+e);
+        }
 
     }
 
     @Test(priority = 3)
     public void validGetRequestWithSold() {
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .params("status","sold")
-                        .get("/pet/findByStatus")
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .params("status","sold")
+                            .get("/pet/findByStatus")
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request cannot sended"+e);
+        }
+
 
         response.getHeader("param");
         ArrayList status = response.path("status");
 
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals(status.get(0),"sold");
-        Assert.assertEquals(response.getStatusCode(),200 );
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals(status.get(0),"sold");
+            Assert.assertEquals(response.getStatusCode(),200 );
+        }catch (AssertionError e){
+            System.out.println("Assertion Error"+e);
+        }
+
     }
     @Test(priority = 4)
     public void validGetRequestWithAvailableAndGetId() {
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .param("status","available")
-                        .get("/pet/findByStatus")
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .param("status","available")
+                            .get("/pet/findByStatus")
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Requset cannot sended"+e);
+        }
 
-        Assert.assertNotNull(response.getBody());
+        try {
+            Assert.assertNotNull(response.getBody());
+        }catch (AssertionError e){
+            System.out.println("Assertion Error"+e);
+        }
+
         ResponseBody body = response.getBody();
 
         ArrayList firstResponseIds = body.jsonPath().get("id");
@@ -128,26 +165,33 @@ public class RestAssuredTests {
         Object newRequestId = firstResponseIds.get(3);
         Object firstResponseThirdObject = firstResponse.get(3);
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .get("/pet/"+newRequestId)
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .get("/pet/"+newRequestId)
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request Can not sended");
+        }
+
 
         ResponseBody body2 = response.getBody();
         JsonPath secondResponse = body2.jsonPath();
         Object secondRespondObject = secondResponse.get();
 
-        System.out.println(body2);
-        System.out.println(secondRespondObject);
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals(firstResponseThirdObject,secondRespondObject);
+        }catch (AssertionError e){
+            System.out.println("Assertion Error"+e);
+        }
 
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals(firstResponseThirdObject,secondRespondObject);
 
     }
 
@@ -161,23 +205,32 @@ public class RestAssuredTests {
        properties.put("name",createRequest().getName());
        properties.put("status", createRequest().getStatus());
 
-       response =
-               given()
-                        .log().all()
-                        .accept("application/json")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .body(properties.toString())
-                        .when()
-                        .post("/pet/"+createRequest().getPetID())
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+       try {
+           response =
+                   given()
+                           .log().all()
+                           .accept("application/json")
+                           .header("Content-Type", "application/x-www-form-urlencoded")
+                           .body(properties.toString())
+                           .when()
+                           .post("/pet/"+createRequest().getPetID())
+                           .then()
+                           .statusCode(200)
+                           .extract().response();
+       }catch (RuntimeException e){
+           System.out.println("Request can not send"+e);
+       }
+
 
         JsonPath jsonPathEvaluator = response.jsonPath();
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),200 );
-        Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
-        Assert.assertEquals(createRequest().getPetID(), Integer.valueOf(jsonPathEvaluator.get("message")));
+       try {
+           Assert.assertNotNull(response.getBody());
+           Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),200 );
+           Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
+           Assert.assertEquals(createRequest().getPetID(), Integer.valueOf(jsonPathEvaluator.get("message")));
+       }catch (AssertionError e){
+           System.out.println("Assertion Error"+e);
+       }
 
     }
     @Test(priority = 6)
@@ -190,22 +243,32 @@ public class RestAssuredTests {
         properties.put("name",createRequest().getName());
         properties.put("status", createRequest().getStatus());
 
-        response =
-                given()
-                        .log().all()
-                        .accept("application/json")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .body(properties.toString())
-                        .when()
-                        .post("/pet/")
-                        .then()
-                        .statusCode(415)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept("application/json")
+                            .header("Content-Type", "application/x-www-form-urlencoded")
+                            .body(properties.toString())
+                            .when()
+                            .post("/pet/")
+                            .then()
+                            .statusCode(415)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request can not send"+e);
+        }
+
 
         JsonPath jsonPathEvaluator = response.jsonPath();
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),415 );
-        Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),415 );
+            Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
+
 
     }
     @Test(priority = 7)
@@ -221,117 +284,156 @@ public class RestAssuredTests {
         properties.put("name",createRequest().getName());
         properties.put("status", createRequest().getStatus());
 
-        response =
-                given()
-                        .log().all()
-                        .accept("application/json")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .body(properties.toString())
-                        .when()
-                        .post("/pet/"+invalidKey)
-                        .then()
-                        .statusCode(404)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept("application/json")
+                            .header("Content-Type", "application/x-www-form-urlencoded")
+                            .body(properties.toString())
+                            .when()
+                            .post("/pet/"+invalidKey)
+                            .then()
+                            .statusCode(404)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request can not send "+e);
+        }
 
         JsonPath jsonPathEvaluator = response.jsonPath();
-        Assert.assertNotNull(response.getBody());
-        Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),404 );
-        Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
-        Assert.assertEquals(assertionError, jsonPathEvaluator.get("message"));
 
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),404 );
+            Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
+            Assert.assertEquals(assertionError, jsonPathEvaluator.get("message"));
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
     }
     @Test(priority = 8)
     public void validDeleteRequest(){
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .param("status","pending")
-                        .get("/pet/findByStatus")
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .param("status","pending")
+                            .get("/pet/findByStatus")
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request can not send "+e);
+        }
 
-        Assert.assertNotNull(response.getBody());
+
+        try {
+            Assert.assertNotNull(response.getBody());
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
+
+
         ResponseBody body = response.getBody();
-
         ArrayList firstResponseIds = body.jsonPath().get("id");
-        ArrayList firstResponse = body.jsonPath().get();
-
         Object newRequestId = firstResponseIds.get(0);
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .delete("/pet/"+newRequestId)
-                        .then()
-                        .statusCode(200)
-                        .extract().response();
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .delete("/pet/"+newRequestId)
+                            .then()
+                            .statusCode(200)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request con not send "+e);
+        }
 
-        Assert.assertNotNull(response.getBody());
+
         ResponseBody body2 = response.getBody();
-
         JsonPath secondResponse = body2.jsonPath();
         Object secondRespondObject = secondResponse.get();
 
-        Assert.assertEquals((Integer) secondResponse.get("code"),200);
-        Assert.assertEquals(secondResponse.get("type"),"unknown");
-        Assert.assertEquals(secondResponse.get("message"), (String.valueOf(newRequestId)));
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals((Integer) secondResponse.get("code"),200);
+            Assert.assertEquals(secondResponse.get("type"),"unknown");
+            Assert.assertEquals(secondResponse.get("message"), (String.valueOf(newRequestId)));
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
 
-        System.out.println(secondRespondObject);
+
+
     }
     @Test(priority = 9)
     public void invalidDeleteRequestFourHundred(){
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .delete("/pet/"+"somethingBad123123%+'^^")
-                        .then()
-                        .statusCode(404)
-                        .extract().response();
-
-        Assert.assertNotNull(response.getBody());
-        System.out.println(response.getBody().asString());
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .delete("/pet/"+"somethingBad123123%+'^^")
+                            .then()
+                            .statusCode(404)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request can not send");
+        }
 
         ResponseBody body = response.getBody();
         JsonPath jsonResponse = body.jsonPath();
 
-        Assert.assertEquals((Integer) jsonResponse.get("code"),404);
-        Assert.assertEquals(jsonResponse.get("type"),"unknown");
+        try {
+            Assert.assertNotNull(response.getBody());
+            Assert.assertEquals((Integer) jsonResponse.get("code"),404);
+            Assert.assertEquals(jsonResponse.get("type"),"unknown");
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
+
 
     }
     @Test(priority = 10)
     public void invalidDeleteRequestFourHundredFive(){
 
-        response =
-                given()
-                        .log().all()
-                        .accept(ContentType.JSON)
-                        .header("Content-Type", "application/json")
-                        .when()
-                        .delete("/pet/")
-                        .then()
-                        .statusCode(405)
-                        .extract().response();
-
-        System.out.println(response.getBody().asString());
-        Assert.assertNotNull(response.getBody().asString());
+        try {
+            response =
+                    given()
+                            .log().all()
+                            .accept(ContentType.JSON)
+                            .header("Content-Type", "application/json")
+                            .when()
+                            .delete("/pet/")
+                            .then()
+                            .statusCode(405)
+                            .extract().response();
+        }catch (RuntimeException e){
+            System.out.println("Request can not send "+e);
+        }
 
         ResponseBody body = response.getBody();
         JsonPath jsonResponse = body.jsonPath();
 
-        Assert.assertEquals((Integer) jsonResponse.get("code"),405);
-        Assert.assertEquals(jsonResponse.get("type"),"unknown");
+        try {
+            Assert.assertNotNull(response.getBody().asString());
+            Assert.assertEquals((Integer) jsonResponse.get("code"),405);
+            Assert.assertEquals(jsonResponse.get("type"),"unknown");
+        }catch (AssertionError e){
+            System.out.println("Assertion Error "+e);
+        }
+
     }
 
 }
