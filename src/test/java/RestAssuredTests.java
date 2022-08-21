@@ -20,6 +20,7 @@ import static io.restassured.RestAssured.*;
 public class RestAssuredTests {
 
     Response response;
+    // create logger for the logs
     private static Logger logger = LoggerFactory.getLogger(RestAssuredTests.class);
 
 
@@ -38,6 +39,7 @@ public class RestAssuredTests {
     @Test(priority = 1)
     public void validGetRequestWithAvailable() {
 
+        // send a valid get request
         try {
             response =
                     given()
@@ -57,12 +59,10 @@ public class RestAssuredTests {
             System.out.println("Request cannot sended "+e);
             logger.error("Problem with request sending");
         }
-
-
-
+        // get the param variable to check it
         response.getHeader("param");
         ArrayList status = response.path("status");
-
+        // check the assertions
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(status.get(0),"available");
@@ -78,6 +78,7 @@ public class RestAssuredTests {
     @Test(priority = 2)
     public void validGetRequestWithPending() {
 
+        // same request for the pending parameters
         try {
             response =
                     given()
@@ -98,10 +99,10 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // get the param variable for checking
         response.getHeader("param");
         ArrayList status = response.path("status");
-
+        // check the assertions
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(status.get(0),"pending");
@@ -116,7 +117,7 @@ public class RestAssuredTests {
 
     @Test(priority = 3)
     public void validGetRequestWithSold() {
-
+        // same test for the sold param
         try {
             response =
                     given()
@@ -137,10 +138,11 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // get the param variable for checking
         response.getHeader("param");
         ArrayList status = response.path("status");
 
+        // check the params
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(status.get(0),"sold");
@@ -155,6 +157,7 @@ public class RestAssuredTests {
     @Test(priority = 4)
     public void validGetRequestWithAvailableAndGetId() {
 
+        // first request for getting the other request
         try {
             response =
                     given()
@@ -170,11 +173,12 @@ public class RestAssuredTests {
 
             logger.info("validGetRequestWithSold first request sended");
 
+
         }catch (RuntimeException e){
-            System.out.println("Requset cannot sended"+e);
+            System.out.println("Requset cannot sended "+e);
             logger.error("Problem with request sending");
         }
-
+        // check the body if it is null
         try {
             Assert.assertNotNull(response.getBody());
             logger.info("for validGetRequestWithAvailableAndGetId first request's assertions passed");
@@ -184,13 +188,14 @@ public class RestAssuredTests {
         }
 
         ResponseBody body = response.getBody();
-
+        // getting the id variables and body
         ArrayList firstResponseIds = body.jsonPath().get("id");
         ArrayList firstResponse = body.jsonPath().get();
-
+        // getting the 3rd id
         Object newRequestId = firstResponseIds.get(3);
         Object firstResponseThirdObject = firstResponse.get(3);
 
+        // creating new request with the id that we got from earlier request
         try {
             response =
                     given()
@@ -210,11 +215,11 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // get the body for checking
         ResponseBody body2 = response.getBody();
         JsonPath secondResponse = body2.jsonPath();
         Object secondRespondObject = secondResponse.get();
-
+        // check the body for assertion
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals(firstResponseThirdObject,secondRespondObject);
@@ -231,10 +236,12 @@ public class RestAssuredTests {
        ObjectMapper mapper = new ObjectMapper();
        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
+       // creating a new json object for the request
        JSONObject properties = new JSONObject();
        properties.put("name",createRequest().getName());
        properties.put("status", createRequest().getStatus());
 
+       // sending the valid request
        try {
            response =
                    given()
@@ -254,8 +261,9 @@ public class RestAssuredTests {
            System.out.println("Request can not send or Failed request "+e);
            logger.error("Problem with request sending");
        }
-
+        // getting the body
         JsonPath jsonPathEvaluator = response.jsonPath();
+       // checling the body
        try {
            Assert.assertNotNull(response.getBody());
            Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),200 );
@@ -277,7 +285,7 @@ public class RestAssuredTests {
         JSONObject properties = new JSONObject();
         properties.put("name",createRequest().getName());
         properties.put("status", createRequest().getStatus());
-
+        // same test as before but in this case i am checking for the empty request
         try {
             response =
                     given()
@@ -288,7 +296,7 @@ public class RestAssuredTests {
                             .when()
                             .post("/pet/")
                             .then()
-                            .statusCode(415)
+                            .statusCode(415) // getting for 415
                             .extract().response();
 
             logger.info("invalidPostRequest second request sended");
@@ -298,8 +306,9 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // getting the body
         JsonPath jsonPathEvaluator = response.jsonPath();
+        // checking the body
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),415 );
@@ -313,6 +322,7 @@ public class RestAssuredTests {
     @Test(priority = 7)
     public void invalidPostRequestFourHundredFour(){
 
+        // creating invalid variable for testing
         String invalidKey = "Random";
         String assertionError ="java.lang.NumberFormatException: For input string: \""+invalidKey+"\"";
 
@@ -323,6 +333,7 @@ public class RestAssuredTests {
         properties.put("name",createRequest().getName());
         properties.put("status", createRequest().getStatus());
 
+        // sending the invalid request
         try {
             response =
                     given()
@@ -342,9 +353,9 @@ public class RestAssuredTests {
             System.out.println("Request can not send "+e);
             logger.error("Problem with request sending");
         }
-
+        // get the body
         JsonPath jsonPathEvaluator = response.jsonPath();
-
+        // checking the body
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),404 );
@@ -358,7 +369,11 @@ public class RestAssuredTests {
     }
     @Test(priority = 8)
     public void validDeleteRequest(){
-
+        // valid get request in here i made a 2 request in one of them i am getting the id
+        // in the second i am deleting the id that i get
+        // I am doing this beacuse if i do this in a static way after one delete request
+        // My request wouldnt be available for testing
+        // Sending the request
         try {
             response =
                     given()
@@ -379,7 +394,7 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // getting the first request
         try {
             Assert.assertNotNull(response.getBody());
             logger.info("for validDeleteRequest first assertions passed");
@@ -387,11 +402,11 @@ public class RestAssuredTests {
             System.out.println("Assertion Error "+e);
             logger.info("for validDeleteRequest first assertions didnt passed");
         }
-
+        // getting the id from first request
         ResponseBody body = response.getBody();
         ArrayList firstResponseIds = body.jsonPath().get("id");
         Object newRequestId = firstResponseIds.get(0);
-
+        // sending the last request
         try {
             response =
                     given()
@@ -411,11 +426,11 @@ public class RestAssuredTests {
             logger.error("Problem with request sending");
         }
 
-
+        // getting the body
         ResponseBody body2 = response.getBody();
         JsonPath secondResponse = body2.jsonPath();
 
-
+        // check body for assertions
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals((Integer) secondResponse.get("code"),200);
@@ -433,6 +448,7 @@ public class RestAssuredTests {
     @Test(priority = 9)
     public void invalidDeleteRequestFourHundred(){
 
+        // sending the invalid delete request
         try {
             response =
                     given()
@@ -451,10 +467,10 @@ public class RestAssuredTests {
             System.out.println("Request can not send");
             logger.error("Problem with request sending");
         }
-
+        // getting the body for checking
         ResponseBody body = response.getBody();
         JsonPath jsonResponse = body.jsonPath();
-
+        // check the body for assertions
         try {
             Assert.assertNotNull(response.getBody());
             Assert.assertEquals((Integer) jsonResponse.get("code"),404);
@@ -469,7 +485,7 @@ public class RestAssuredTests {
     }
     @Test(priority = 10)
     public void invalidDeleteRequestFourHundredFive(){
-
+        // sending the request
         try {
             response =
                     given()
@@ -488,10 +504,11 @@ public class RestAssuredTests {
             System.out.println("Request can not send "+e);
             logger.error("Problem with request sending");
         }
+        // getting the body
 
         ResponseBody body = response.getBody();
         JsonPath jsonResponse = body.jsonPath();
-
+        // checking the body for assertions
         try {
             Assert.assertNotNull(response.getBody().asString());
             Assert.assertEquals((Integer) jsonResponse.get("code"),405);
