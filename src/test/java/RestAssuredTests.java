@@ -1,373 +1,212 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.qameta.allure.Description;
 import io.restassured.http.ContentType;
 
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
-
-
 import io.restassured.response.ResponseBody;
-import models.RequestBody;
-import org.json.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-
 import static io.restassured.RestAssured.*;
-public class RestAssuredTests {
+@Slf4j
+public class RestAssuredTests extends BaseRequest{
 
-    Response response;
     // create logger for the logs
     private static Logger logger = LoggerFactory.getLogger(RestAssuredTests.class);
-
 
     public RestAssuredTests() {
         baseURI = "https://petstore.swagger.io/v2";
     }
-    public RequestBody createRequest() {
-        int petId = 570;
-        String name = "Aslan";
-        String status = "sold";
-        String type ="unknown";
-        return new RequestBody(petId, name, status,type);
-    }
-
 
     @Test(priority = 1)
+    @Description("validGetRequestWithAvailable")
     public void validGetRequestWithAvailable() {
 
         // send a valid get request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .params("status", "available")
-                            .get("/pet/findByStatus")
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
-
-            logger.info("validGetRequestWithAvailable request sended");
-
-        }catch (RuntimeException e){
-            System.out.println("Request cannot sended "+e);
-            logger.error("Problem with request sending");
+            response = getRequestWithParams("available");
+            logger.info("validGetRequestWithAvailable request send");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("Problem with request sending "+e);
         }
         // get the param variable to check it
-        response.getHeader("param");
-        ArrayList status = response.path("status");
         // check the assertions
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals(status.get(0),"available");
+            Assert.assertEquals(statusList("status","available").get(0),"available");
             Assert.assertEquals(response.getStatusCode(),200 );
             logger.info("for validGetRequestWithAvailable assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error"+e);
-            logger.error("for validGetRequestWithAvailable assertions didnt pass");
+            logger.error("for validGetRequestWithAvailable assertions didn't pass "+e);
         }
 
 
     }
     @Test(priority = 2)
+    @Description("validGetRequestWithPending")
     public void validGetRequestWithPending() {
 
         // same request for the pending parameters
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .params("status","pending")
-                            .get("/pet/findByStatus")
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
-
-            logger.info("validGetRequestWithPending request sended");
-
-        }catch (RuntimeException e){
-            System.out.println("Request cannot be send"+e);
-            logger.error("Problem with request sending");
+            response = getRequestWithParams("pending");
+            logger.info("validGetRequestWithPending request send");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("Problem with request sending "+e);
         }
-
         // get the param variable for checking
-        response.getHeader("param");
-        ArrayList status = response.path("status");
         // check the assertions
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals(status.get(0),"pending");
+            Assert.assertEquals(statusList("status","pending").get(0),"pending");
             Assert.assertEquals(response.getStatusCode(),200 );
             logger.info("for validGetRequestWithPending assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error"+e);
-            logger.error("for validGetRequestWithPending assertions didnt pass");
+            logger.error("for validGetRequestWithPending assertions didn't pass "+e);
         }
 
     }
 
     @Test(priority = 3)
+    @Description("validGetRequestWithSold")
     public void validGetRequestWithSold() {
         // same test for the sold param
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .params("status","sold")
-                            .get("/pet/findByStatus")
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
+            response = getRequestWithParams("sold");
+            logger.info("validGetRequestWithSold request send");
 
-            logger.info("validGetRequestWithSold request sended");
-
-        }catch (RuntimeException e){
-            System.out.println("Request cannot sended"+e);
-            logger.error("Problem with request sending");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("Problem with request sending "+e);
         }
-
         // get the param variable for checking
-        response.getHeader("param");
-        ArrayList status = response.path("status");
-
         // check the params
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals(status.get(0),"sold");
+            Assert.assertEquals(statusList("status","sold").get(0),"sold");
             Assert.assertEquals(response.getStatusCode(),200 );
             logger.info("for validGetRequestWithSold assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error"+e);
-            logger.error("for validGetRequestWithSold assertions didnt pass");
+            logger.error("for validGetRequestWithSold assertions didn't pass "+e);
         }
-
     }
     @Test(priority = 4)
+    @Description("validGetRequestWithAvailableAndGetId")
     public void validGetRequestWithAvailableAndGetId() {
 
         // first request for getting the other request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .param("status","available")
-                            .get("/pet/findByStatus")
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
+            response = getRequestWithParams("pending");
+            logger.info("validGetRequestWithSold first request send");
 
-            logger.info("validGetRequestWithSold first request sended");
-
-
-        }catch (RuntimeException e){
-            System.out.println("Requset cannot sended "+e);
-            logger.error("Problem with request sending");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("First request Problem with request sending "+e);
         }
         // check the body if it is null
         try {
             Assert.assertNotNull(response.getBody());
             logger.info("for validGetRequestWithAvailableAndGetId first request's assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error"+e);
-            logger.error("for validGetRequestWithSold first request's assertions didnt pass");
+            logger.error("for validGetRequestWithSold first request's assertions didn't pass "+e);
         }
-
-        ResponseBody body = response.getBody();
-        // getting the id variables and body
-        ArrayList firstResponseIds = body.jsonPath().get("id");
-        ArrayList firstResponse = body.jsonPath().get();
-        // getting the 3rd id
-        Object newRequestId = firstResponseIds.get(3);
-        Object firstResponseThirdObject = firstResponse.get(3);
 
         // creating new request with the id that we got from earlier request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .get("/pet/"+newRequestId)
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
+            response = getRequestWithId(Integer.parseInt(idGetter(3)));
+            logger.info("validGetRequestWithSold second request send");
 
-            logger.info("validGetRequestWithSold second request sended");
-
-        }catch (RuntimeException e){
-            System.out.println("Request Can not sended");
-            logger.error("Problem with request sending");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("Second request Problem with request sending "+e);
         }
-
         // get the body for checking
-        ResponseBody body2 = response.getBody();
-        JsonPath secondResponse = body2.jsonPath();
-        Object secondRespondObject = secondResponse.get();
         // check the body for assertion
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals(firstResponseThirdObject,secondRespondObject);
             logger.info("for validGetRequestWithAvailableAndGetId second request's assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error"+e);
-            logger.error("for validGetRequestWithSold second request's assertions didnt pass");
+            logger.error("for validGetRequestWithSold second request's assertions didn't pass "+e);
         }
     }
 
    @Test(priority = 5)
+   @Description("validPostRequest")
    public void validPostRequest(){
 
-       ObjectMapper mapper = new ObjectMapper();
-       mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
        // creating a new json object for the request
-       JSONObject properties = new JSONObject();
-       properties.put("name",createRequest().getName());
-       properties.put("status", createRequest().getStatus());
-
        // sending the valid request
        try {
-           response =
-                   given()
-                           .log().all()
-                           .accept("application/json")
-                           .header("Content-Type", "application/x-www-form-urlencoded")
-                           .body(properties.toString())
-                           .when()
-                           .post("/pet/"+createRequest().getPetID())
-                           .then()
-                           .statusCode(200)
-                           .extract().response();
-
-           logger.info("validPostRequest second request sended");
+           response = postRequest(createRequest().getPetID());
+           logger.info("validPostRequest second request send");
 
        }catch (RuntimeException | AssertionError e){
-           System.out.println("Request can not send or Failed request "+e);
-           logger.error("Problem with request sending");
+           logger.error("Problem with request sending "+e);
        }
         // getting the body
-        JsonPath jsonPathEvaluator = response.jsonPath();
-       // checling the body
+       // checking the body
        try {
            Assert.assertNotNull(response.getBody());
-           Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),200 );
-           Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
-           Assert.assertEquals(createRequest().getPetID(), Integer.valueOf(jsonPathEvaluator.get("message")));
+           Assert.assertEquals((Integer) response.jsonPath().get("code"),200 );
+           Assert.assertEquals(createRequest().getType(), response.jsonPath().get("type"));
+           Assert.assertEquals(createRequest().getPetID(), Integer.valueOf(response.jsonPath().get("message")));
            logger.info("for validPostRequest assertions passed");
        }catch (AssertionError e){
-           System.out.println("Assertion Error"+e);
-           logger.error("for validPostRequest assertions didnt pass");
+           logger.error("for validPostRequest assertions didn't pass "+e);
        }
 
     }
     @Test(priority = 6)
+    @Description("invalidPostRequest")
     public void invalidPostRequest(){
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-        JSONObject properties = new JSONObject();
-        properties.put("name",createRequest().getName());
-        properties.put("status", createRequest().getStatus());
         // same test as before but in this case i am checking for the empty request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept("application/json")
-                            .header("Content-Type", "application/x-www-form-urlencoded")
-                            .body(properties.toString())
-                            .when()
-                            .post("/pet/")
-                            .then()
-                            .statusCode(415) // getting for 415
-                            .extract().response();
-
-            logger.info("invalidPostRequest second request sended");
+            response = postRequest(Integer.valueOf(""));
+            logger.info("invalidPostRequest second request send");
 
         }catch (RuntimeException e){
-            System.out.println("Request can not send"+e);
-            logger.error("Problem with request sending");
+            logger.error("Problem with request sending "+e);
         }
-
         // getting the body
-        JsonPath jsonPathEvaluator = response.jsonPath();
         // checking the body
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),415 );
-            Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
+            Assert.assertEquals((Integer)  response.jsonPath().get("code"),415 );
+            Assert.assertEquals(createRequest().getType(), response.jsonPath().get("type"));
             logger.info("for invalidPostRequest assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error "+e);
-            logger.error("for invalidPostRequest assertions didnt pass");
+            logger.error("for invalidPostRequest assertions didn't pass "+e);
         }
     }
     @Test(priority = 7)
+    @Description("invalidPostRequestFourHundredFour")
     public void invalidPostRequestFourHundredFour(){
 
         // creating invalid variable for testing
         String invalidKey = "Random";
         String assertionError ="java.lang.NumberFormatException: For input string: \""+invalidKey+"\"";
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-        JSONObject properties = new JSONObject();
-        properties.put("name",createRequest().getName());
-        properties.put("status", createRequest().getStatus());
-
         // sending the invalid request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept("application/json")
-                            .header("Content-Type", "application/x-www-form-urlencoded")
-                            .body(properties.toString())
-                            .when()
-                            .post("/pet/"+invalidKey)
-                            .then()
-                            .statusCode(404)
-                            .extract().response();
-
-            logger.info("invalidPostRequestFourHundredFour request sended");
+            response = postRequest(Integer.valueOf(invalidKey));
+            logger.info("invalidPostRequestFourHundredFour request send");
 
         }catch (RuntimeException e){
-            System.out.println("Request can not send "+e);
-            logger.error("Problem with request sending");
+            logger.error("Problem with request sending "+e);
         }
         // get the body
-        JsonPath jsonPathEvaluator = response.jsonPath();
         // checking the body
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals((Integer) jsonPathEvaluator.get("code"),404 );
-            Assert.assertEquals(createRequest().getType(), jsonPathEvaluator.get("type"));
-            Assert.assertEquals(assertionError, jsonPathEvaluator.get("message"));
+            Assert.assertEquals((Integer) response.jsonPath().get("code"),404 );
+            Assert.assertEquals(createRequest().getType(), response.jsonPath().get("type"));
+            Assert.assertEquals(assertionError, response.jsonPath().get("message"));
             logger.info("for invalidPostRequestFourHundredFour assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error "+e);
-            logger.error("for invalidPostRequestFourHundredFour assertions didnt pass");
+            logger.error("for invalidPostRequestFourHundredFour assertions didn't pass "+e);
         }
     }
     @Test(priority = 8)
+    @Description("validDeleteRequest")
     public void validDeleteRequest(){
         // valid get request in here i made a 2 request in one of them i am getting the id
         // in the second i am deleting the id that i get
@@ -375,148 +214,82 @@ public class RestAssuredTests {
         // My request wouldnt be available for testing
         // Sending the request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .param("status","pending")
-                            .get("/pet/findByStatus")
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
+            response = getRequestWithParams("pending");
+            logger.info("validDeleteRequest first request send");
 
-            logger.info("validDeleteRequest first request sended");
-
-        }catch (RuntimeException e){
-            System.out.println("Request can not send "+e);
-            logger.error("Problem with request sending");
+        }catch (RuntimeException | JsonProcessingException e){
+            logger.error("Problem with request sending "+e);
         }
-
         // getting the first request
         try {
             Assert.assertNotNull(response.getBody());
             logger.info("for validDeleteRequest first assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error "+e);
-            logger.info("for validDeleteRequest first assertions didnt passed");
+            logger.info("for validDeleteRequest first assertions didn't passed "+e);
         }
-        // getting the id from first request
-        ResponseBody body = response.getBody();
-        ArrayList firstResponseIds = body.jsonPath().get("id");
-        Object newRequestId = firstResponseIds.get(0);
         // sending the last request
+        String checkId = idGetter(0);
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .delete("/pet/"+newRequestId)
-                            .then()
-                            .statusCode(200)
-                            .extract().response();
-
-            logger.info("validDeleteRequest second request sended");
+            response = deleteRequest(Integer.valueOf(checkId));
+            logger.info("validDeleteRequest second request send");
 
         }catch (RuntimeException e){
-            System.out.println("Request con not send "+e);
-            logger.error("Problem with request sending");
+            logger.error("Problem with request sending "+e);
         }
-
         // getting the body
-        ResponseBody body2 = response.getBody();
-        JsonPath secondResponse = body2.jsonPath();
-
         // check body for assertions
         try {
             Assert.assertNotNull(response.getBody());
-            Assert.assertEquals((Integer) secondResponse.get("code"),200);
-            Assert.assertEquals(secondResponse.get("type"),"unknown");
-            Assert.assertEquals(secondResponse.get("message"), (String.valueOf(newRequestId)));
+            Assert.assertEquals((Integer) response.getBody().jsonPath().get("code"),200);
+            Assert.assertEquals(response.getBody().jsonPath().get("type"),"unknown");
+            Assert.assertEquals(response.getBody().jsonPath().get("message"), checkId);
             logger.info("for validDeleteRequest second assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error "+e);
-            logger.info("for validDeleteRequest second assertions didnt passed");
+            logger.info("for validDeleteRequest second assertions didn't passed "+e);
         }
-
-
 
     }
     @Test(priority = 9)
+    @Description("invalidDeleteRequestFourHundred")
     public void invalidDeleteRequestFourHundred(){
 
         // sending the invalid delete request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .delete("/pet/"+"somethingBad123123%+'^^")
-                            .then()
-                            .statusCode(404)
-                            .extract().response();
-
-            logger.info("invalidDeleteRequestFourHundred request sended");
+            response = deleteRequest(123); // deleted id
+            logger.info("invalidDeleteRequestFourHundred request send");
 
         }catch (RuntimeException e){
-            System.out.println("Request can not send");
-            logger.error("Problem with request sending");
+            logger.error("Problem with request sending "+e);
         }
         // getting the body for checking
-        ResponseBody body = response.getBody();
-        JsonPath jsonResponse = body.jsonPath();
         // check the body for assertions
         try {
-            Assert.assertNotNull(response.getBody());
-            Assert.assertEquals((Integer) jsonResponse.get("code"),404);
-            Assert.assertEquals(jsonResponse.get("type"),"unknown");
+            Assert.assertNull(response.getBody());
             logger.info("for invalidDeleteRequestFourHundred assertions passed");
         }catch (AssertionError e){
             System.out.println("Assertion Error "+e);
-            logger.info("for invalidDeleteRequestFourHundred assertions didnt passed");
+            logger.info("for invalidDeleteRequestFourHundred assertions didn't passed "+e);
         }
-
-
     }
     @Test(priority = 10)
+    @Description("invalidDeleteRequestFourHundredFive")
     public void invalidDeleteRequestFourHundredFive(){
         // sending the request
         try {
-            response =
-                    given()
-                            .log().all()
-                            .accept(ContentType.JSON)
-                            .header("Content-Type", "application/json")
-                            .when()
-                            .delete("/pet/")
-                            .then()
-                            .statusCode(405)
-                            .extract().response();
-
-            logger.info("invalidDeleteRequestFourHundredFive request sended");
+            response = invalidDeleteRequest();
+            logger.info("invalidDeleteRequestFourHundredFive request send");
 
         }catch (RuntimeException e){
-            System.out.println("Request can not send "+e);
-            logger.error("Problem with request sending");
+            logger.error("Problem with request sending "+e);
         }
         // getting the body
-
-        ResponseBody body = response.getBody();
-        JsonPath jsonResponse = body.jsonPath();
         // checking the body for assertions
         try {
-            Assert.assertNotNull(response.getBody().asString());
-            Assert.assertEquals((Integer) jsonResponse.get("code"),405);
-            Assert.assertEquals(jsonResponse.get("type"),"unknown");
+            Assert.assertNull(response.getBody().asString());
             logger.info("for invalidDeleteRequestFourHundredFive assertions passed");
         }catch (AssertionError e){
-            System.out.println("Assertion Error "+e);
-            logger.info("for invalidDeleteRequestFourHundredFive assertions didnt passed");
+            logger.info("for invalidDeleteRequestFourHundredFive assertions didn't passed "+e);
         }
 
     }

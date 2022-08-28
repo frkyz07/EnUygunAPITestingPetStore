@@ -18,11 +18,7 @@
                     <target>18</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>2.10.0</version>
-            </plugin>
+
         </plugins>
     </build>
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -31,6 +27,12 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.18.1</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java -->
@@ -81,7 +83,6 @@
             <artifactId>spring-web</artifactId>
             <version>3.0.2.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -110,15 +111,5 @@
             <version>1.4.0.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
-
-
-
     </dependencies>
-
-
-
-
-
-
 </project>
