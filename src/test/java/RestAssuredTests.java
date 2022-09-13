@@ -1,9 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.qameta.allure.Description;
-import io.restassured.http.ContentType;
 
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +18,8 @@ public class RestAssuredTests extends BaseRequest{
         baseURI = "https://petstore.swagger.io/v2";
     }
 
-    @Test(priority = 1)
-    @Description("validGetRequestWithAvailable")
+    @Test(priority = 1, description = "validGetRequestWithAvailable")
+    @Description("Sending a valid get request with available parameters ")
     public void validGetRequestWithAvailable() {
 
         // send a valid get request
@@ -45,8 +42,8 @@ public class RestAssuredTests extends BaseRequest{
 
 
     }
-    @Test(priority = 2)
-    @Description("validGetRequestWithPending")
+    @Test(priority = 2, description = "validGetRequestWithPending")
+    @Description("Sending a valid get request with pending parameter")
     public void validGetRequestWithPending() {
 
         // same request for the pending parameters
@@ -69,8 +66,8 @@ public class RestAssuredTests extends BaseRequest{
 
     }
 
-    @Test(priority = 3)
-    @Description("validGetRequestWithSold")
+    @Test(priority = 3, description = "validGetRequestWithSold")
+    @Description("Sending a valid get request with sold parameter")
     public void validGetRequestWithSold() {
         // same test for the sold param
         try {
@@ -91,8 +88,8 @@ public class RestAssuredTests extends BaseRequest{
             logger.error("for validGetRequestWithSold assertions didn't pass "+e);
         }
     }
-    @Test(priority = 4)
-    @Description("validGetRequestWithAvailableAndGetId")
+    @Test(priority = 4, description = "validGetRequestWithAvailableAndGetId")
+    @Description("Sending a valid get request with available and sending new request with the id ")
     public void validGetRequestWithAvailableAndGetId() {
 
         // first request for getting the other request
@@ -129,8 +126,8 @@ public class RestAssuredTests extends BaseRequest{
         }
     }
 
-   @Test(priority = 5)
-   @Description("validPostRequest")
+   @Test(priority = 5, description = "validPostRequest")
+   @Description("Sending a valid get request")
    public void validPostRequest(){
 
        // creating a new json object for the request
@@ -155,8 +152,9 @@ public class RestAssuredTests extends BaseRequest{
        }
 
     }
-    @Test(priority = 6)
-    @Description("invalidPostRequest")
+
+    @Test(priority = 6, description = "invalidPostRequest")
+    @Description("Sending a invalid get request")
     public void invalidPostRequest(){
 
         // same test as before but in this case i am checking for the empty request
@@ -178,8 +176,8 @@ public class RestAssuredTests extends BaseRequest{
             logger.error("for invalidPostRequest assertions didn't pass "+e);
         }
     }
-    @Test(priority = 7)
-    @Description("invalidPostRequestFourHundredFour")
+    @Test(priority = 7, description = "invalidPostRequestFourHundredFour")
+    @Description("Sending a invalid post request and getting 404 response")
     public void invalidPostRequestFourHundredFour(){
 
         // creating invalid variable for testing
@@ -205,8 +203,8 @@ public class RestAssuredTests extends BaseRequest{
             logger.error("for invalidPostRequestFourHundredFour assertions didn't pass "+e);
         }
     }
-    @Test(priority = 8)
-    @Description("validDeleteRequest")
+    @Test(priority = 8, description = "validDeleteRequest")
+    @Description("Sending a valid delete request")
     public void validDeleteRequest(){
         // valid get request in here i made a 2 request in one of them i am getting the id
         // in the second i am deleting the id that i get
@@ -250,8 +248,8 @@ public class RestAssuredTests extends BaseRequest{
         }
 
     }
-    @Test(priority = 9)
-    @Description("invalidDeleteRequestFourHundred")
+    @Test(priority = 9,description = "invalidDeleteRequestFourHundred")
+    @Description("Sending a invalid delete request and expecting 404 response")
     public void invalidDeleteRequestFourHundred(){
 
         // sending the invalid delete request
@@ -272,8 +270,8 @@ public class RestAssuredTests extends BaseRequest{
             logger.info("for invalidDeleteRequestFourHundred assertions didn't passed "+e);
         }
     }
-    @Test(priority = 10)
-    @Description("invalidDeleteRequestFourHundredFive")
+    @Test(priority = 10,description = "invalidDeleteRequestFourHundredFive")
+    @Description("Sending a invalid delete request and expecting 404 response")
     public void invalidDeleteRequestFourHundredFive(){
         // sending the request
         try {

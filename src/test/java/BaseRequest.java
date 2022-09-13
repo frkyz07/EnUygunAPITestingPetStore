@@ -15,8 +15,8 @@ public class BaseRequest {
 
     public RequestBody createRequest() {
         int petId = 690;
-        String name = "Ahmet";
-        String status = "pending";
+        String name = "Nedim";
+        String status = "sold";
         String type ="unknown";
         return new RequestBody(petId, name, status,type);
     }
